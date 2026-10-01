@@ -1,0 +1,21 @@
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# SQLite database
+*.db
+*.sqlite
+*.sqlite3
+
+# Angular
+node_modules/
+dist/
+.angular/
+
+# Environment files
+.env
+
+# VS Code
+.vscode/

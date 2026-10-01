@@ -1,0 +1,699 @@
+.dashboard {
+  max-width: 1000px;
+  margin: 40px auto;
+  padding: 30px;
+  font-family: Arial, sans-serif;
+  background: #f5f7fb;
+  min-height: 100vh;
+}
+
+
+/* Main Heading */
+
+h1 {
+  text-align: center;
+  margin-bottom: 5px;
+}
+
+.subtitle {
+  text-align: center;
+  color: #666;
+  margin-bottom: 25px;
+}
+
+
+/* Monitoring Status */
+
+.monitoring-status {
+  background: white;
+  padding: 18px 22px;
+  border-radius: 12px;
+  margin-bottom: 25px;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 15px;
+
+  color: #555;
+}
+
+.monitoring-status > div:first-child {
+  color: #15803d;
+}
+
+.monitoring-dot {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  margin-right: 8px;
+}
+
+.monitoring-dot.active {
+  background: #22c55e;
+  box-shadow: 0 0 8px rgba(34, 197, 94, 0.6);
+}
+
+.monitoring-dot.inactive {
+  background: #ef4444;
+}
+
+
+/* Failure Alert */
+
+.failure-alert {
+  background: #fee2e2;
+  border: 1px solid #ef4444;
+  color: #991b1b;
+  padding: 18px;
+  border-radius: 10px;
+  margin-bottom: 25px;
+  text-align: center;
+}
+
+.failure-alert strong {
+  font-size: 18px;
+}
+
+.failure-alert p {
+  margin: 8px 0 0;
+}
+
+
+/* Summary Cards */
+
+.summary {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+  margin-bottom: 30px;
+}
+
+.summary-card {
+  background: white;
+  padding: 20px;
+  border-radius: 12px;
+  text-align: center;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+}
+
+.summary-card h3 {
+  margin: 0;
+  color: #555;
+}
+
+.summary-card p {
+  font-size: 30px;
+  font-weight: bold;
+  margin: 10px 0 0;
+}
+
+.healthy-card {
+  border-top: 5px solid #22c55e;
+}
+
+.slow-card {
+  border-top: 5px solid #f59e0b;
+}
+
+.failed-card {
+  border-top: 5px solid #ef4444;
+}
+
+
+/* Check Button */
+
+button {
+  display: block;
+  margin: 20px auto;
+  padding: 12px 25px;
+  border: none;
+  border-radius: 8px;
+  background: #2563eb;
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+button:hover {
+  background: #1d4ed8;
+}
+
+button:disabled {
+  background: #999;
+  cursor: not-allowed;
+}
+
+
+/* Search Section */
+
+.search-section {
+  background: white;
+  padding: 18px;
+  border-radius: 12px;
+  margin-top: 25px;
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+}
+
+.search-section input {
+  flex: 1;
+  padding: 11px 14px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  font-size: 15px;
+  outline: none;
+}
+
+.search-section input:focus {
+  border-color: #2563eb;
+}
+
+.search-section select {
+  padding: 11px 14px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  font-size: 15px;
+  background: white;
+  cursor: pointer;
+}
+
+.clear-button {
+  margin: 0;
+  padding: 11px 16px;
+  background: #6b7280;
+  font-size: 14px;
+}
+
+.clear-button:hover {
+  background: #4b5563;
+}
+
+
+/* API Results */
+
+.api-section {
+  margin-top: 30px;
+}
+
+.api-section h2 {
+  margin-bottom: 20px;
+}
+
+.api-card {
+  background: white;
+  padding: 22px;
+  margin-bottom: 18px;
+  border-radius: 12px;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+}
+
+.api-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.api-header h3 {
+  margin: 0;
+}
+
+.status {
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-weight: bold;
+}
+
+.status.healthy {
+  background: #dcfce7;
+  color: #15803d;
+}
+
+.status.slow {
+  background: #fef3c7;
+  color: #b45309;
+}
+
+.status.failed {
+  background: #fee2e2;
+  color: #b91c1c;
+}
+
+.api-url {
+  word-break: break-all;
+  color: #555;
+}
+
+
+/* Health Score */
+
+.health-score-box {
+  background: #f8fafc;
+  border: 1px solid #dbe3ee;
+  padding: 18px;
+  margin: 18px 0;
+  border-radius: 12px;
+}
+
+.health-score-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.health-score-header strong {
+  font-size: 16px;
+  color: #334155;
+}
+
+.health-rating {
+  padding: 5px 11px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: bold;
+}
+
+.excellent-rating {
+  background: #dcfce7;
+  color: #15803d;
+}
+
+.good-rating {
+  background: #dbeafe;
+  color: #1d4ed8;
+}
+
+.attention-rating {
+  background: #fef3c7;
+  color: #b45309;
+}
+
+.critical-rating {
+  background: #fee2e2;
+  color: #b91c1c;
+}
+
+.health-score-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+}
+
+.health-score-number {
+  font-size: 36px;
+  font-weight: bold;
+  color: #1e293b;
+}
+
+.health-score-number span {
+  font-size: 16px;
+  color: #64748b;
+  font-weight: normal;
+}
+
+.health-score-info {
+  flex: 1;
+}
+
+.health-score-info p {
+  margin: 5px 0;
+  color: #64748b;
+  font-size: 14px;
+}
+
+.health-score-bar {
+  height: 10px;
+  background: #e2e8f0;
+  border-radius: 10px;
+  overflow: hidden;
+  margin-top: 18px;
+}
+
+.health-score-fill {
+  height: 100%;
+  border-radius: 10px;
+  transition: width 0.5s ease;
+}
+
+.excellent-bar {
+  background: #22c55e;
+}
+
+.good-bar {
+  background: #3b82f6;
+}
+
+.attention-bar {
+  background: #f59e0b;
+}
+
+.critical-bar {
+  background: #ef4444;
+}
+
+
+/* Uptime */
+
+.uptime-box {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  padding: 15px;
+  margin: 18px 0;
+  border-radius: 10px;
+}
+
+.uptime-box > div:first-child {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.uptime-percentage {
+  font-size: 22px;
+  font-weight: bold;
+  color: #15803d;
+}
+
+.uptime-details {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+  color: #64748b;
+  font-size: 14px;
+}
+
+
+/* Response Time Statistics */
+
+.statistics-box {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  padding: 15px;
+  margin: 18px 0;
+  border-radius: 10px;
+}
+
+.statistics-title {
+  margin-bottom: 15px;
+  color: #334155;
+}
+
+.statistics-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+}
+
+.stat-item {
+  background: white;
+  padding: 12px;
+  border-radius: 8px;
+  text-align: center;
+  border: 1px solid #e2e8f0;
+}
+
+.stat-label {
+  display: block;
+  color: #64748b;
+  font-size: 13px;
+  margin-bottom: 6px;
+}
+
+.stat-item strong {
+  font-size: 16px;
+  color: #1e293b;
+}
+
+
+/* Availability Trend */
+
+.availability-trend-box {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  padding: 18px;
+  margin: 18px 0;
+  border-radius: 10px;
+}
+
+.availability-trend-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 5px;
+}
+
+.availability-trend-header strong {
+  color: #334155;
+  font-size: 16px;
+}
+
+.availability-trend-header span {
+  color: #64748b;
+  font-size: 13px;
+}
+
+.availability-description {
+  color: #64748b;
+  font-size: 13px;
+  margin: 5px 0 15px;
+}
+
+.availability-timeline {
+  display: flex;
+  gap: 5px;
+  align-items: center;
+  flex-wrap: wrap;
+  padding: 10px;
+  background: white;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+}
+
+.availability-point {
+  width: 16px;
+  height: 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.availability-point:hover {
+  transform: scale(1.25);
+}
+
+.available-point {
+  background: #22c55e;
+}
+
+.unavailable-point {
+  background: #ef4444;
+}
+
+.availability-legend {
+  display: flex;
+  gap: 20px;
+  margin-top: 12px;
+  font-size: 13px;
+  color: #64748b;
+}
+
+.availability-legend span {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.legend-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.legend-dot.available {
+  background: #22c55e;
+}
+
+.legend-dot.unavailable {
+  background: #ef4444;
+}
+
+
+/* No Results */
+
+.no-results {
+  background: white;
+  padding: 25px;
+  text-align: center;
+  border-radius: 12px;
+  color: #666;
+}
+
+
+/* Error Message */
+
+.error {
+  text-align: center;
+  color: #dc2626;
+  font-weight: bold;
+}
+
+
+/* Performance Chart */
+
+.chart-section {
+  background: white;
+  padding: 25px;
+  margin-top: 30px;
+  border-radius: 12px;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+}
+
+.chart-section h2 {
+  margin-top: 0;
+  margin-bottom: 5px;
+}
+
+.chart-description {
+  color: #666;
+  margin-bottom: 20px;
+}
+
+.chart-container {
+  position: relative;
+  height: 350px;
+  width: 100%;
+}
+
+
+/* Performance History */
+
+.history-section {
+  margin-top: 30px;
+}
+
+.history-section h2 {
+  margin-bottom: 20px;
+}
+
+.history-card {
+  background: white;
+  padding: 20px;
+  margin-bottom: 15px;
+  border-radius: 12px;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+}
+
+.history-card h3 {
+  margin-top: 0;
+  margin-bottom: 15px;
+}
+
+.history-api {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  padding: 10px 0;
+  border-bottom: 1px solid #eee;
+}
+
+.history-api:last-child {
+  border-bottom: none;
+}
+
+
+/* History Status */
+
+.healthy-text {
+  color: #15803d;
+  font-weight: bold;
+}
+
+.slow-text {
+  color: #b45309;
+  font-weight: bold;
+}
+
+.failed-text {
+  color: #b91c1c;
+  font-weight: bold;
+}
+
+
+/* Mobile Responsive */
+
+@media (max-width: 700px) {
+
+  .summary {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .dashboard {
+    margin: 10px;
+    padding: 20px;
+  }
+
+  .monitoring-status {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .search-section {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .search-section input,
+  .search-section select {
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .clear-button {
+    width: 100%;
+  }
+
+  .history-api {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+
+  .uptime-details {
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .statistics-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .health-score-content {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .health-score-number {
+    font-size: 32px;
+  }
+
+  .chart-container {
+    height: 280px;
+  }
+
+  .availability-timeline {
+    gap: 4px;
+  }
+
+  .availability-point {
+    width: 14px;
+    height: 14px;
+  }
+
+}

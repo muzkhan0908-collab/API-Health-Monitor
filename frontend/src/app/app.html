@@ -1,0 +1,611 @@
+<div class="dashboard">
+
+  <h1>API Health Monitor</h1>
+
+  <p class="subtitle">
+    Real-time API performance monitoring
+  </p>
+
+
+  <!-- Monitoring Status -->
+
+  <div class="monitoring-status">
+
+    <div>
+
+      <span
+        class="monitoring-dot"
+        [ngClass]="{
+          'active': monitoringActive,
+          'inactive': !monitoringActive
+        }">
+      </span>
+
+      <strong>
+        {{ monitoringActive
+           ? 'Monitoring Active'
+           : 'Monitoring Inactive' }}
+      </strong>
+
+    </div>
+
+    <div *ngIf="lastChecked">
+
+      Last checked:
+      <strong>{{ lastChecked }}</strong>
+
+    </div>
+
+    <div>
+
+      Automatic check:
+      <strong>Every 30 seconds</strong>
+
+    </div>
+
+  </div>
+
+
+  <!-- Failure Alert -->
+
+  <div
+    class="failure-alert"
+    *ngIf="getCount('Failed') > 0">
+
+    <strong>⚠ API Failure Detected</strong>
+
+    <p>
+      {{ getCount('Failed') }}
+      API(s) are currently unavailable.
+    </p>
+
+  </div>
+
+
+  <!-- Summary Cards -->
+
+  <div class="summary">
+
+    <div class="summary-card">
+
+      <h3>Total APIs</h3>
+      <p>{{ apiData.length }}</p>
+
+    </div>
+
+    <div class="summary-card healthy-card">
+
+      <h3>Healthy</h3>
+      <p>{{ getCount('Healthy') }}</p>
+
+    </div>
+
+    <div class="summary-card slow-card">
+
+      <h3>Slow</h3>
+      <p>{{ getCount('Slow') }}</p>
+
+    </div>
+
+    <div class="summary-card failed-card">
+
+      <h3>Failed</h3>
+      <p>{{ getCount('Failed') }}</p>
+
+    </div>
+
+  </div>
+
+
+  <!-- Check Button -->
+
+  <button
+    (click)="checkAllApis()"
+    [disabled]="loading">
+
+    {{ loading ? 'Checking...' : 'Check All APIs' }}
+
+  </button>
+
+
+  <p *ngIf="loading">
+
+    Checking API health. Please wait...
+
+  </p>
+
+
+  <p
+    class="error"
+    *ngIf="error">
+
+    {{ error }}
+
+  </p>
+
+
+  <!-- Search and Filter -->
+
+  <div
+    class="search-section"
+    *ngIf="apiData.length > 0">
+
+    <input
+      type="text"
+      placeholder="Search API name..."
+      [(ngModel)]="searchText">
+
+    <button
+      class="clear-button"
+      *ngIf="searchText"
+      (click)="clearSearch()">
+
+      Clear
+
+    </button>
+
+    <select
+      [(ngModel)]="statusFilter">
+
+      <option value="All">All Status</option>
+      <option value="Healthy">Healthy</option>
+      <option value="Slow">Slow</option>
+      <option value="Failed">Failed</option>
+
+    </select>
+
+  </div>
+
+
+  <!-- Current API Results -->
+
+  <div
+    class="api-section"
+    *ngIf="apiData.length > 0">
+
+    <h2>Current API Results</h2>
+
+
+    <div
+      class="no-results"
+      *ngIf="filteredApis.length === 0">
+
+      No APIs found.
+
+    </div>
+
+
+    <div
+      class="api-card"
+      *ngFor="let api of filteredApis">
+
+
+      <!-- API Header -->
+
+      <div class="api-header">
+
+        <h3>{{ api.name }}</h3>
+
+        <span
+          class="status"
+          [ngClass]="{
+            'healthy': api.status === 'Healthy',
+            'slow': api.status === 'Slow',
+            'failed': api.status === 'Failed'
+          }">
+
+          {{ api.status }}
+
+        </span>
+
+      </div>
+
+
+      <!-- Health Score -->
+
+      <div
+        class="health-score-box"
+        *ngIf="getHealthScore(api.name) as health">
+
+        <div class="health-score-header">
+
+          <strong>
+            API Health Score
+          </strong>
+
+          <span
+            class="health-rating"
+            [ngClass]="{
+              'excellent-rating': health.rating === 'Excellent',
+              'good-rating': health.rating === 'Good',
+              'attention-rating': health.rating === 'Needs Attention',
+              'critical-rating': health.rating === 'Critical'
+            }">
+
+            {{ health.rating }}
+
+          </span>
+
+        </div>
+
+
+        <div class="health-score-content">
+
+          <div class="health-score-number">
+
+            {{ health.health_score }}
+
+            <span>/100</span>
+
+          </div>
+
+
+          <div class="health-score-info">
+
+            <p>
+
+              <strong>Uptime:</strong>
+
+              {{ health.uptime_percentage }}%
+
+            </p>
+
+
+            <p>
+
+              <strong>Average Response:</strong>
+
+              {{ health.average_response_time_ms }}
+
+              ms
+
+            </p>
+
+          </div>
+
+        </div>
+
+
+        <div class="health-score-bar">
+
+          <div
+            class="health-score-fill"
+            [ngClass]="{
+              'excellent-bar': health.health_score >= 90,
+              'good-bar': health.health_score >= 75 && health.health_score < 90,
+              'attention-bar': health.health_score >= 50 && health.health_score < 75,
+              'critical-bar': health.health_score < 50
+            }"
+            [style.width.%]="health.health_score">
+
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <!-- Current Response -->
+
+      <p>
+
+        <strong>Response Time:</strong>
+
+        {{ api.response_time_ms !== null
+           ? api.response_time_ms + ' ms'
+           : 'N/A' }}
+
+      </p>
+
+
+      <p>
+
+        <strong>HTTP Status:</strong>
+
+        {{ api.status_code }}
+
+      </p>
+
+
+      <!-- Uptime -->
+
+      <div
+        class="uptime-box"
+        *ngIf="getUptime(api.name) as uptime">
+
+        <div>
+
+          <strong>Uptime</strong>
+
+          <span class="uptime-percentage">
+
+            {{ uptime.uptime_percentage }}%
+
+          </span>
+
+        </div>
+
+
+        <div class="uptime-details">
+
+          <span>
+
+            Total Checks:
+            {{ uptime.total_checks }}
+
+          </span>
+
+          <span>
+
+            Successful:
+            {{ uptime.successful_checks }}
+
+          </span>
+
+          <span>
+
+            Failed:
+            {{ uptime.failed_checks }}
+
+          </span>
+
+        </div>
+
+      </div>
+
+
+      <!-- Response Time Statistics -->
+
+      <div
+        class="statistics-box"
+        *ngIf="getStatistics(api.name) as statistics">
+
+        <div class="statistics-title">
+
+          <strong>
+            Response Time Statistics
+          </strong>
+
+        </div>
+
+
+        <div class="statistics-grid">
+
+          <div class="stat-item">
+
+            <span class="stat-label">
+              Average
+            </span>
+
+            <strong>
+
+              {{ statistics.average_response_time_ms }}
+              ms
+
+            </strong>
+
+          </div>
+
+
+          <div class="stat-item">
+
+            <span class="stat-label">
+              Minimum
+            </span>
+
+            <strong>
+
+              {{ statistics.minimum_response_time_ms }}
+              ms
+
+            </strong>
+
+          </div>
+
+
+          <div class="stat-item">
+
+            <span class="stat-label">
+              Maximum
+            </span>
+
+            <strong>
+
+              {{ statistics.maximum_response_time_ms }}
+              ms
+
+            </strong>
+
+          </div>
+
+
+          <div class="stat-item">
+
+            <span class="stat-label">
+              Measurements
+            </span>
+
+            <strong>
+
+              {{ statistics.total_response_measurements }}
+
+            </strong>
+
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <!-- Availability Trend -->
+
+      <div
+        class="availability-trend-box"
+        *ngIf="getAvailabilityTrend(api.name) as trend">
+
+        <div class="availability-trend-header">
+
+          <strong>
+            Availability Trend
+          </strong>
+
+          <span>
+            {{ trend.checks.length }} checks
+          </span>
+
+        </div>
+
+
+        <p class="availability-description">
+
+          Last 20 monitoring checks
+
+        </p>
+
+
+        <div class="availability-timeline">
+
+          <div
+            class="availability-point"
+            *ngFor="let check of trend.checks.slice(-20)"
+            [ngClass]="{
+              'available-point': check.availability === 'Available',
+              'unavailable-point': check.availability === 'Unavailable'
+            }"
+            [title]="check.time + ' - ' + check.status">
+
+          </div>
+
+        </div>
+
+
+        <div class="availability-legend">
+
+          <span>
+
+            <i class="legend-dot available"></i>
+            Available
+
+          </span>
+
+
+          <span>
+
+            <i class="legend-dot unavailable"></i>
+            Unavailable
+
+          </span>
+
+        </div>
+
+      </div>
+
+
+      <!-- API URL -->
+
+      <p class="api-url">
+
+        <strong>URL:</strong>
+
+        {{ api.url }}
+
+      </p>
+
+    </div>
+
+  </div>
+
+
+  <!-- ================================= -->
+  <!-- Response Time Performance Chart -->
+  <!-- ================================= -->
+
+  <div
+    class="chart-section"
+    *ngIf="history.length > 0">
+
+    <h2>
+      Response Time Performance
+    </h2>
+
+    <p class="chart-description">
+
+      Response time of each API across monitoring checks
+
+    </p>
+
+
+    <div class="chart-container">
+
+      <canvas id="responseChart"></canvas>
+
+    </div>
+
+  </div>
+
+
+  <!-- Performance History -->
+
+  <div
+    class="history-section"
+    *ngIf="history.length > 0">
+
+    <h2>
+      Performance History
+    </h2>
+
+
+    <div
+      class="history-card"
+      *ngFor="let record of history">
+
+      <h3>
+
+        Check Time:
+        {{ record.time }}
+
+      </h3>
+
+
+      <div
+        class="history-api"
+        *ngFor="let api of record.results">
+
+        <span>
+
+          <strong>
+            {{ api.name }}
+          </strong>
+
+        </span>
+
+
+        <span>
+
+          {{ api.response_time_ms !== null
+             ? api.response_time_ms + ' ms'
+             : 'Failed' }}
+
+        </span>
+
+
+        <span
+          [ngClass]="{
+            'healthy-text': api.status === 'Healthy',
+            'slow-text': api.status === 'Slow',
+            'failed-text': api.status === 'Failed'
+          }">
+
+          {{ api.status }}
+
+        </span>
+
+      </div>
+
+    </div>
+
+  </div>
+
+
+</div>
